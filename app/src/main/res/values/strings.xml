@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Pokemon API Display</string>
+    <string name="id">id</string>
+    <string name="id_placeholder">123</string>
     <string name="name">Name</string>
     <string name="name_placeholder">Pokemon Name</string>
     <string name="next">Next</string>
