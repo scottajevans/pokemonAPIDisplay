@@ -1,19 +1,19 @@
 package com.clonetech.pokemonapidisplay
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.IOException
 import org.json.JSONObject
+import java.io.InputStream
+import java.net.URL
 import kotlin.properties.Delegates
 
 private val client = OkHttpClient()
@@ -24,11 +24,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var nameTextView : TextView
     private lateinit var idTextView : TextView
-    private lateinit var heightTextView: TextView
-    private lateinit var weightTextView: TextView
+    private lateinit var heightTextView : TextView
+    private lateinit var weightTextView : TextView
 
-    private lateinit var nextButton: Button
-    private lateinit var prevButton: Button
+    private lateinit var spriteView : ImageView
+
+    private lateinit var nextButton : Button
+    private lateinit var prevButton : Button
 
     private var pokemon by Delegates.observable(JSONObject()) { _, _, newValue ->
         updatePokemonInfo(newValue)
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         idTextView = findViewById(R.id.id)
         heightTextView = findViewById(R.id.height)
         weightTextView = findViewById(R.id.weight)
+
+        spriteView = findViewById(R.id.sprite_image)
 
         nextButton = findViewById(R.id.next)
         prevButton = findViewById(R.id.previous)
@@ -68,11 +72,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updatePokemonInfo(pokemon: JSONObject) {
+        val sprite = JSONObject(pokemon.get("sprites").toString()).get("front_default").toString()
+        val img = BitmapFactory.decodeStream(URL(sprite).content as InputStream?)
+
         this@MainActivity.runOnUiThread {
             nameTextView.text = pokemon.get("name").toString().replaceFirstChar(Char::titlecase)
             idTextView.text = id.toString()
             heightTextView.text = "${pokemon.get("height").toString()} ${getString(R.string.decimetres)}"
             weightTextView.text = "${pokemon.get("weight").toString()} ${getString(R.string.hectograms)}"
+            spriteView.setImageBitmap(img)
         }
     }
 
