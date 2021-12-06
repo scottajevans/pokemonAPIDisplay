@@ -3,6 +3,7 @@
     <string name="decimetres">Decimetres</string>
     <string name="hectograms">Hectograms</string>
     <string name="height">Height</string>
+    <string name="height_full_string">%1$s Decimetres</string>
     <string name="height_placeholder">20 Decimetres</string>
     <string name="id">ID</string>
     <string name="id_placeholder">123</string>
@@ -12,6 +13,7 @@
     <string name="previous">Previous</string>
     <string name="search_placeholder">Search by ID or name</string>
     <string name="weight">Weight</string>
+    <string name="weight_full_string">%1$s Hectograms</string>
     <string name="weight_placeholder">100 Hectograms</string>
 
 

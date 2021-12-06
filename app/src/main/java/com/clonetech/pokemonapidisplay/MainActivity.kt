@@ -72,14 +72,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updatePokemonInfo(pokemon: JSONObject) {
-        val sprite = JSONObject(pokemon.get("sprites").toString()).get("front_default").toString()
+        val sprite = "https://img.pokemondb.net/artwork/large/${pokemon.get("name")}.jpg"
         val img = BitmapFactory.decodeStream(URL(sprite).content as InputStream?)
 
         this@MainActivity.runOnUiThread {
             nameTextView.text = pokemon.get("name").toString().replaceFirstChar(Char::titlecase)
             idTextView.text = id.toString()
-            heightTextView.text = "${pokemon.get("height").toString()} ${getString(R.string.decimetres)}"
-            weightTextView.text = "${pokemon.get("weight").toString()} ${getString(R.string.hectograms)}"
+            heightTextView.text = getString(R.string.height_full_string, pokemon.get("height").toString())
+            weightTextView.text = getString(R.string.weight_full_string, pokemon.get("weight").toString())
             spriteView.setImageBitmap(img)
         }
     }
