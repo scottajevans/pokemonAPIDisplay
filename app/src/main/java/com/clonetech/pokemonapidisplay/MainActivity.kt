@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var idTextView : TextView
     private lateinit var heightTextView : TextView
     private lateinit var weightTextView : TextView
+    private lateinit var typeOneTextView: TextView
+    private lateinit var typeTwoTextView: TextView
 
     private lateinit var spriteView : ImageView
 
@@ -46,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         idTextView = findViewById(R.id.id)
         heightTextView = findViewById(R.id.height)
         weightTextView = findViewById(R.id.weight)
+        typeOneTextView = findViewById(R.id.type_one)
+        typeTwoTextView = findViewById(R.id.type_two)
 
         spriteView = findViewById(R.id.sprite_image)
 
@@ -75,12 +80,25 @@ class MainActivity : AppCompatActivity() {
         val sprite = "https://img.pokemondb.net/artwork/large/${pokemon.get("name")}.jpg"
         val img = BitmapFactory.decodeStream(URL(sprite).content as InputStream?)
 
+        val jsonTypes = pokemon.getJSONArray("types")
+        var types = arrayListOf<String>()
+        for (i in 0 until jsonTypes.length()) {
+            types.add(jsonTypes.getJSONObject(i).getJSONObject("type").get("name").toString())
+        }
+
         this@MainActivity.runOnUiThread {
             nameTextView.text = pokemon.get("name").toString().replaceFirstChar(Char::titlecase)
-            idTextView.text = id.toString()
+            idTextView.text = getString(R.string.id_full_string, id.toString())
             heightTextView.text = getString(R.string.height_full_string, pokemon.get("height").toString())
             weightTextView.text = getString(R.string.weight_full_string, pokemon.get("weight").toString())
             spriteView.setImageBitmap(img)
+            typeOneTextView.text = types[0].replaceFirstChar(Char::titlecase)
+            if (types.size > 1) {
+                typeTwoTextView.visibility = View.VISIBLE
+                typeTwoTextView.text = types[1].replaceFirstChar(Char::titlecase)
+            } else {
+                typeTwoTextView.visibility = View.INVISIBLE
+            }
         }
     }
 
