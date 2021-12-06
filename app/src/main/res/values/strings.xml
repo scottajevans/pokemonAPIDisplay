@@ -13,10 +13,14 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="search_placeholder">Search by ID or name</string>
+    <string name="type_one_placeholder">Grass</string>
+    <string name="type_two_placeholder">Poison</string>
     <string name="weight">Weight</string>
     <string name="weight_full_string">%1$s Hectograms</string>
     <string name="weight_placeholder">100 Hectograms</string>
 
 
     <string name="not_found">Pokemon not found, please try another name or ID</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

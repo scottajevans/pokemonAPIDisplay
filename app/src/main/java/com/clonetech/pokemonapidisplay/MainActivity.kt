@@ -4,10 +4,17 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.*
@@ -21,41 +28,43 @@ private val client = OkHttpClient()
 private var id : Int = 1
 
 class MainActivity : AppCompatActivity() {
+    private var pokemon by Delegates.observable(JSONObject()) { _, _, newValue ->
+        updatePokemonInfo(newValue)
+    }
+
+    private lateinit var container : RelativeLayout
     private lateinit var searchField : EditText
 
     private lateinit var nameTextView : TextView
     private lateinit var idTextView : TextView
-    private lateinit var heightTextView : TextView
-    private lateinit var weightTextView : TextView
     private lateinit var typeOneTextView: TextView
     private lateinit var typeTwoTextView: TextView
 
     private lateinit var spriteView : ImageView
+    private lateinit var pager2: ViewPager2
 
     private lateinit var nextButton : Button
     private lateinit var prevButton : Button
-
-    private var pokemon by Delegates.observable(JSONObject()) { _, _, newValue ->
-        updatePokemonInfo(newValue)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         makeAPICall(id.toString())
+        container = findViewById(R.id.main_container)
         searchField = findViewById(R.id.search)
 
         nameTextView = findViewById(R.id.name)
         idTextView = findViewById(R.id.id)
-        heightTextView = findViewById(R.id.height)
-        weightTextView = findViewById(R.id.weight)
         typeOneTextView = findViewById(R.id.type_one)
         typeTwoTextView = findViewById(R.id.type_two)
 
         spriteView = findViewById(R.id.sprite_image)
+        pager2 = findViewById(R.id.pager)
 
         nextButton = findViewById(R.id.next)
         prevButton = findViewById(R.id.previous)
+
+        pager2.adapter = PagerAdapter(this, pokemon)
 
         searchField.setOnEditorActionListener { textView, i, _ ->
             if (i == EditorInfo.IME_ACTION_SEARCH) {
@@ -89,8 +98,6 @@ class MainActivity : AppCompatActivity() {
         this@MainActivity.runOnUiThread {
             nameTextView.text = pokemon.get("name").toString().replaceFirstChar(Char::titlecase)
             idTextView.text = getString(R.string.id_full_string, id.toString())
-            heightTextView.text = getString(R.string.height_full_string, pokemon.get("height").toString())
-            weightTextView.text = getString(R.string.weight_full_string, pokemon.get("weight").toString())
             spriteView.setImageBitmap(img)
             typeOneTextView.text = types[0].replaceFirstChar(Char::titlecase)
             if (types.size > 1) {
@@ -99,7 +106,23 @@ class MainActivity : AppCompatActivity() {
             } else {
                 typeTwoTextView.visibility = View.INVISIBLE
             }
+
+            pager2.adapter = PagerAdapter(this, pokemon)
+//            setContainerBackground(types[0])
         }
+    }
+
+    fun setContainerBackground(type : String) {
+        println("Type is: ")
+        println(type)
+        var colour : Int? = null
+        when (type) {
+            "grass", "poison" -> colour = ContextCompat.getColor(this@MainActivity, R.color.green)
+            "fire" -> colour = ContextCompat.getColor(this@MainActivity, R.color.red)
+            "water" -> colour = ContextCompat.getColor(this@MainActivity, R.color.blue)
+            else -> colour = ContextCompat.getColor(this@MainActivity, R.color.white)
+        }
+        container.setBackgroundColor(colour)
     }
 
     fun makeAPICall(searchValue: String) {
@@ -137,5 +160,27 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    class PagerAdapter(fragmentActivity: FragmentActivity, pokemonJson: JSONObject) :
+        FragmentStateAdapter(fragmentActivity) {
+
+        var pokemon = pokemonJson.toString()
+
+        override fun getItemCount(): Int {
+            return 4
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> AboutFragment.newInstance(pokemon)
+                1 -> BaseStatsFragment.newInstance("test","test2")
+                2 -> AboutFragment.newInstance(pokemon)
+                3 -> AboutFragment.newInstance(pokemon)
+                else -> AboutFragment.newInstance(pokemon)
+
+            }
+        }
+
     }
 }

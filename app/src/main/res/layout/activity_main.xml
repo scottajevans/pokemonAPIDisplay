@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/main_container">
 
     <EditText
         android:id="@+id/search"
@@ -24,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/search"
         android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/top_container">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,6 +90,7 @@
                 android:paddingBottom="5dp"
                 android:textFontWeight="700"
                 android:textSize="12sp"
+                android:hint="@string/type_one_placeholder"
                 />
 
             <TextView
@@ -102,6 +105,7 @@
                 android:paddingBottom="5dp"
                 android:textFontWeight="700"
                 android:textSize="12sp"
+                android:hint="@string/type_two_placeholder"
                 />
 
         </LinearLayout>
@@ -113,62 +117,29 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:maxHeight="150dp"
-            android:adjustViewBounds="true"/>
+            android:adjustViewBounds="true"
+            android:background="@color/transparent"/>
 
-        <LinearLayout
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="100dp"
+        android:layout_below="@id/top_container"
+        android:layout_above="@+id/nav_container"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp">
+            android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/height"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/height"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:hint="@string/height_placeholder"
-                    android:textAlignment="center" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/weight"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/weight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:hint="@string/weight_placeholder"
-                    android:textAlignment="center" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -177,7 +148,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+        android:id="@+id/nav_container">
 
         <Button
             android:id="@+id/previous"
