@@ -113,8 +113,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setContainerBackground(type : String) {
-        println("Type is: ")
-        println(type)
         var colour : Int? = null
         when (type) {
             "grass", "poison" -> colour = ContextCompat.getColor(this@MainActivity, R.color.green)

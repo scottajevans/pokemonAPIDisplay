@@ -37,7 +37,6 @@ class AboutFragment : Fragment() {
 
         if (pokemon.toString() != "{}")
         {
-            println("HELLO POKEMON IS: ${pokemon}")
             species.text = JSONObject(pokemon!!.getString("species")).getString("name")
             height.text = pokemon!!.getString("height")
             weight.text = pokemon!!.getString("weight")
