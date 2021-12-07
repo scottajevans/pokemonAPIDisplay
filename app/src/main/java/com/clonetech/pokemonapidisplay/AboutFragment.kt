@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import org.json.JSONArray
 import org.json.JSONObject
 
 private const val POKEMON_ARG = "pokemon"
@@ -16,6 +17,7 @@ class AboutFragment : Fragment() {
     private lateinit var species : TextView
     private lateinit var height : TextView
     private lateinit var weight : TextView
+    private lateinit var abilities : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +36,25 @@ class AboutFragment : Fragment() {
         species = root.findViewById(R.id.species)
         height = root.findViewById(R.id.height)
         weight = root.findViewById(R.id.weight)
+        abilities = root.findViewById(R.id.abilities)
 
         if (pokemon.toString() != "{}")
         {
             species.text = JSONObject(pokemon!!.getString("species")).getString("name")
             height.text = pokemon!!.getString("height")
             weight.text = pokemon!!.getString("weight")
+
+            val abilitiesJson = pokemon!!.getJSONArray("abilities")
+            var abilitiesString = ""
+            for (i in 0 until abilitiesJson.length()) {
+                if (i > 0) {
+                    abilitiesString += ", "
+                }
+                abilitiesString += abilitiesJson.getJSONObject(i).getJSONObject("ability")
+                    .getString("name").replaceFirstChar(Char::titlecase)
+            }
+
+            abilities.text = abilitiesString
         }
 
         return root

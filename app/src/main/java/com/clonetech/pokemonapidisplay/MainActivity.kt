@@ -92,11 +92,11 @@ class MainActivity : AppCompatActivity() {
         val jsonTypes = pokemon.getJSONArray("types")
         var types = arrayListOf<String>()
         for (i in 0 until jsonTypes.length()) {
-            types.add(jsonTypes.getJSONObject(i).getJSONObject("type").get("name").toString())
+            types.add(jsonTypes.getJSONObject(i).getJSONObject("type").getString("name"))
         }
 
         this@MainActivity.runOnUiThread {
-            nameTextView.text = pokemon.get("name").toString().replaceFirstChar(Char::titlecase)
+            nameTextView.text = pokemon.getString("name").replaceFirstChar(Char::titlecase)
             idTextView.text = getString(R.string.id_full_string, id.toString())
             spriteView.setImageBitmap(img)
             typeOneTextView.text = types[0].replaceFirstChar(Char::titlecase)
