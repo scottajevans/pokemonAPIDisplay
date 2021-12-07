@@ -90,6 +90,7 @@
                 android:paddingBottom="5dp"
                 android:textFontWeight="700"
                 android:textSize="12sp"
+                android:textAlignment="center"
                 android:hint="@string/type_one_placeholder"
                 />
 
@@ -105,6 +106,7 @@
                 android:paddingBottom="5dp"
                 android:textFontWeight="700"
                 android:textSize="12sp"
+                android:textAlignment="center"
                 android:hint="@string/type_two_placeholder"
                 />
 
@@ -125,21 +127,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="100dp"
         android:layout_below="@id/top_container"
         android:layout_above="@+id/nav_container"
+        android:id="@+id/details_container"
         android:orientation="vertical">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top"
+            app:tabTextAppearance="@style/tabLayoutTextStyle"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
     </LinearLayout>
 

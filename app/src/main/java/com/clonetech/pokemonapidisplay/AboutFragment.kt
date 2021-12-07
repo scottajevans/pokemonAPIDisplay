@@ -40,7 +40,7 @@ class AboutFragment : Fragment() {
 
         if (pokemon.toString() != "{}")
         {
-            species.text = JSONObject(pokemon!!.getString("species")).getString("name")
+            species.text = pokemon!!.getJSONObject("species").getString("name").replaceFirstChar(Char::titlecase)
             height.text = pokemon!!.getString("height")
             weight.text = pokemon!!.getString("weight")
 

@@ -1,31 +1,30 @@
 package com.clonetech.pokemonapidisplay
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ListView
+import android.widget.TextView
+import org.json.JSONArray
+import org.json.JSONObject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val POKEMON_ARG = "pokemon"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BaseStats.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BaseStatsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var pokemon: JSONObject? = null
+
+    private lateinit var listView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            val pokemonString = it.getString(POKEMON_ARG)
+            pokemon = JSONObject(pokemonString!!)
         }
     }
 
@@ -34,26 +33,66 @@ class BaseStatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_base_stats, container, false)
+        val root = inflater.inflate(R.layout.fragment_base_stats, container, false)
+
+        listView = root.findViewById(R.id.stats_list)
+
+        if (pokemon != null){
+            val adapter = ListAdapter(requireContext(), pokemon!!.getJSONArray("stats"))
+            listView.adapter = adapter
+        }
+
+        return root
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BaseStats.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(pokemonString: String) =
             BaseStatsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(POKEMON_ARG, pokemonString)
                 }
             }
+    }
+
+    class ListAdapter(context : Context, private val dataSource: JSONArray) : BaseAdapter() {
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return dataSource.length()
+        }
+
+        override fun getItem(position: Int): JSONObject {
+            return dataSource.getJSONObject(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        @SuppressLint("ViewHolder")
+        override fun getView(position: Int, p1: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.base_stat_row, parent, false)
+
+            val statName = rowView.findViewById<TextView>(R.id.stat_name)
+            val statValue = rowView.findViewById<TextView>(R.id.stat_value)
+
+            val poke = getItem(position)
+
+            val nameOriginal = poke.getJSONObject("stat").getString("name")
+            val name: String
+            when (nameOriginal) {
+                "hp" -> name = "HP"
+                "special-attack" -> name = "Sp. Atk"
+                "special-defense" -> name = "Sp. Def"
+                else -> name= nameOriginal.replaceFirstChar(Char::titlecase)
+            }
+            statName.text = name
+            statValue.text = poke.getString("base_stat")
+
+            return rowView
+        }
+
     }
 }

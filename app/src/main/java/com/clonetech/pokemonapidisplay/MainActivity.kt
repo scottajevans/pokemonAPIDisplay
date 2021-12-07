@@ -2,11 +2,10 @@ package com.clonetech.pokemonapidisplay
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -15,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.*
@@ -41,7 +42,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var typeTwoTextView: TextView
 
     private lateinit var spriteView : ImageView
+    private lateinit var detailsContainer : LinearLayout
     private lateinit var pager2: ViewPager2
+    private lateinit var tabLayout : TabLayout
 
     private lateinit var nextButton : Button
     private lateinit var prevButton : Button
@@ -59,12 +62,19 @@ class MainActivity : AppCompatActivity() {
         typeTwoTextView = findViewById(R.id.type_two)
 
         spriteView = findViewById(R.id.sprite_image)
+        detailsContainer = findViewById(R.id.details_container)
         pager2 = findViewById(R.id.pager)
+        tabLayout = findViewById(R.id.tab_layout)
 
         nextButton = findViewById(R.id.next)
         prevButton = findViewById(R.id.previous)
 
         pager2.adapter = PagerAdapter(this, pokemon)
+
+        val tabTitles = arrayListOf("About", "Base Stats", "Evolution", "Moves")
+        TabLayoutMediator(tabLayout, pager2) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
 
         searchField.setOnEditorActionListener { textView, i, _ ->
             if (i == EditorInfo.IME_ACTION_SEARCH) {
@@ -99,28 +109,30 @@ class MainActivity : AppCompatActivity() {
             nameTextView.text = pokemon.getString("name").replaceFirstChar(Char::titlecase)
             idTextView.text = getString(R.string.id_full_string, id.toString())
             spriteView.setImageBitmap(img)
-            typeOneTextView.text = types[0].replaceFirstChar(Char::titlecase)
+            typeOneTextView.text = types[0].replaceFirstChar(Char::titlecase).trim()
             if (types.size > 1) {
                 typeTwoTextView.visibility = View.VISIBLE
-                typeTwoTextView.text = types[1].replaceFirstChar(Char::titlecase)
+                typeTwoTextView.text = types[1].replaceFirstChar(Char::titlecase).trim()
             } else {
                 typeTwoTextView.visibility = View.INVISIBLE
             }
 
             pager2.adapter = PagerAdapter(this, pokemon)
-//            setContainerBackground(types[0])
+            setContainerBackground(types[0])
         }
     }
 
     fun setContainerBackground(type : String) {
         var colour : Int? = null
         when (type) {
-            "grass", "poison" -> colour = ContextCompat.getColor(this@MainActivity, R.color.green)
+            "grass", "poison", "bug" -> colour = ContextCompat.getColor(this@MainActivity, R.color.green)
             "fire" -> colour = ContextCompat.getColor(this@MainActivity, R.color.red)
             "water" -> colour = ContextCompat.getColor(this@MainActivity, R.color.blue)
             else -> colour = ContextCompat.getColor(this@MainActivity, R.color.white)
         }
-        container.setBackgroundColor(colour)
+        val colourArray = intArrayOf(getColor(R.color.white), colour)
+        val gradient = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colourArray)
+        pager2.background = gradient
     }
 
     fun makeAPICall(searchValue: String) {
@@ -172,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> AboutFragment.newInstance(pokemon)
-                1 -> BaseStatsFragment.newInstance("test","test2")
+                1 -> BaseStatsFragment.newInstance(pokemon)
                 2 -> AboutFragment.newInstance(pokemon)
                 3 -> AboutFragment.newInstance(pokemon)
                 else -> AboutFragment.newInstance(pokemon)

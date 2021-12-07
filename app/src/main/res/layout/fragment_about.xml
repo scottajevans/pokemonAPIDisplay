@@ -8,23 +8,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:textSize="14sp"
                 android:text="Species"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
+                android:textSize="14sp"
+                android:textFontWeight="700"
+                android:textColor="@color/black"
                 android:text="Seed"
                 android:id="@+id/species"/>
 
@@ -33,18 +40,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:textSize="14sp"
                 android:text="@string/height"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
+                android:textSize="14sp"
+                android:textFontWeight="700"
+                android:textColor="@color/black"
                 android:text="@string/height_placeholder"
                 android:id="@+id/height"/>
 
@@ -53,18 +65,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:textSize="14sp"
                 android:text="@string/weight"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
+                android:textSize="14sp"
+                android:textFontWeight="700"
+                android:textColor="@color/black"
                 android:text="@string/weight_placeholder"
                 android:id="@+id/weight"/>
 
@@ -73,18 +90,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:textSize="14sp"
                 android:text="Abilities"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
+                android:textSize="14sp"
+                android:textFontWeight="700"
+                android:textColor="@color/black"
                 android:text="Overgrown, Chlorophyll"
                 android:id="@+id/abilities"/>
 
