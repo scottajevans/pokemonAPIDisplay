@@ -93,6 +93,5 @@ class BaseStatsFragment : Fragment() {
 
             return rowView
         }
-
     }
 }

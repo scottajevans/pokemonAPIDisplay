@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setContainerBackground(type : String) {
-        var colour : Int? = null
+        var colour : Int?
         when (type) {
             "grass", "poison", "bug" -> colour = ContextCompat.getColor(this@MainActivity, R.color.green)
             "fire" -> colour = ContextCompat.getColor(this@MainActivity, R.color.red)
@@ -174,8 +174,12 @@ class MainActivity : AppCompatActivity() {
 
     class PagerAdapter(fragmentActivity: FragmentActivity, pokemonJson: JSONObject) :
         FragmentStateAdapter(fragmentActivity) {
-
         var pokemon = pokemonJson.toString()
+        var pokemonName = getName(pokemonJson)
+
+        private fun getName(pokemonJson: JSONObject): String {
+            return if (pokemonJson.has("name")) pokemonJson.getString("name") else ""
+        }
 
         override fun getItemCount(): Int {
             return 4
@@ -185,7 +189,7 @@ class MainActivity : AppCompatActivity() {
             return when (position) {
                 0 -> AboutFragment.newInstance(pokemon)
                 1 -> BaseStatsFragment.newInstance(pokemon)
-                2 -> AboutFragment.newInstance(pokemon)
+                2 -> EvolutionFragment.newInstance(pokemonName)
                 3 -> AboutFragment.newInstance(pokemon)
                 else -> AboutFragment.newInstance(pokemon)
 
